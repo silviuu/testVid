@@ -1,10 +1,48 @@
-<iframe id="pjsfrrsplrboss" scrolling="no" title="pjsfrrsplrboss" allowfullscreen="true" allowtransparency="true" allow-scripts="true" style="position: absolute; width: 100%; height: 100%; border: 0px; pointer-events: none;">
+<style>
+  iframe {
+  margin: 10px;
+}
+
+#blob-src-test {
+  outline: 2px solid cyan;
+}
+
+#document-write-test {
+  outline: 2px solid magenta;
+}
+</style>
+
+<iframe id="blob-src-test" frameborder="0" width="300px" height="300px"></iframe>
+
+<iframe id="document-write-test" frameborder="0" width="300px" height="300px"></iframe>
+
+<script>
+  var variables = {
+  title: 'Hello',
+  image: 'blob:https://pulse1.zalmora.cfd/6359d56b-ca20-478b-a554-f468ee7063a7'
+};
+
+var template = [
+  '<h1>',
+  variables.title,
+  '</h1>',
+  '<img width="80%" src="',
+  variables.image,
+  '">'
+].join('');
 
 
-<video preload="none" x-webkit-airplay="allow" disableremoteplayback="" style="position: static; width: 100%; height: 100%; object-fit: contain; transition: filter 0.2s linear; min-height: auto; max-height: none; min-width: auto; max-width: none; filter: none;"><source type="video/mp4" src="blob:https://pulse1.zalmora.cfd/6359d56b-ca20-478b-a554-f468ee7063a7"></video>
+// Alt 1: Blob approach
+var blob = new Blob([template], {type: "text/html"});
+var blob_url = URL.createObjectURL(blob);
+var blob_iframe = document.querySelector('#blob-src-test');
 
-<source type="video/mp4" src="blob:https://pulse1.zalmora.cfd/6359d56b-ca20-478b-a554-f468ee7063a7">
+blob_iframe.src = blob_url;
 
-</video>
 
-</iframe>
+// Alt. 2: Document write ("old school")
+var doc = document.querySelector('#document-write-test').contentWindow.document;
+doc.open();
+doc.write(template);
+doc.close();
+</script>
